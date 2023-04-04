@@ -105,7 +105,7 @@
             android:layout_marginBottom="7dp"
             android:layout_height="40dp" />
         <GridLayout
-            android:id="@+id/GridLayout1"
+            android:id="@+id/GridLayout0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:columnCount="2"
@@ -124,7 +124,7 @@
                 android:layout_height="150dp" />
             <TextView
                 android:text="Heed not the rabble"
-                android:textSize="6pt"
+                android:textSize="6.5pt"
                 android:background="@color/teal_200"
                 android:layout_marginTop="7dp"
                 android:layout_marginRight="7dp"
@@ -134,7 +134,7 @@
                 android:layout_height="150dp" />
             <TextView
                 android:text="Sound of screams but the"
-                android:textSize="6pt"
+                android:textSize="6.5pt"
                 android:background="@color/color8"
                 android:layout_marginTop="7dp"
                 android:layout_marginRight="7dp"
@@ -145,7 +145,7 @@
                 android:layout_height="100dp" />
             <TextView
                 android:text="Who scream"
-                android:textSize="6pt"
+                android:textSize="6.5pt"
                 android:background="@color/teal_700"
                 android:layout_marginTop="7dp"
                 android:layout_marginRight="7dp"

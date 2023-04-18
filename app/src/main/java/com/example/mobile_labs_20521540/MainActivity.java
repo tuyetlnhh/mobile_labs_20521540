@@ -18,7 +18,6 @@ public class MainActivity extends Activity {
     ListView lvNhanvien;
     ArrayList<Employee> arrEmployee=new ArrayList<Employee>();
     ArrayAdapter<Employee>adapter=null;
-    //Khai báo 1 employee object
     Employee tEmployee=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +47,6 @@ public class MainActivity extends Activity {
         String strGross=editGross.getText()+"";
         double Gross = Double.parseDouble(strGross);
         tEmployee = new Employee(Name,Gross);
-        tEmployee.setName(Name);
         tEmployee.setGross(Gross);
         double Net = tEmployee.TinhNet();
         tEmployee.setNet(Net);

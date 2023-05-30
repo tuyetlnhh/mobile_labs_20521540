@@ -1,7 +1,5 @@
 package com.example.mobile_labs_20521540;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,39 +13,70 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 public class Register extends AppCompatActivity {
-    EditText editName,editPhone, editPass, editUser;
-    TextView txtLogin;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    EditText editName;
+    EditText editPhone;
+    EditText editUser;
+    EditText editPass;
     Button btnSign;
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");    @Override
+
+    private String encryptPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(password.getBytes());
+            BigInteger number = new BigInteger(1, messageDigest);
+            String md5Password = number.toString(16);
+
+            while (md5Password.length() < 32) {
+                md5Password = "0" + md5Password;
+            }
+
+            return md5Password;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        editName = (EditText) findViewById(R.id.inputName);
-        editPhone = (EditText) findViewById(R.id.inputPhone);
-        editUser = (EditText) findViewById(R.id.inputUser);
-        editPass = (EditText) findViewById(R.id.inputPass);
-        btnSign = (Button) findViewById(R.id.btnSign);
-        txtLogin = (TextView) findViewById(R.id.txtLogin);
+        btnSign =findViewById(R.id.btnSign);
+        editName = findViewById(R.id.inputName);
+        editPhone = findViewById(R.id.inputPhone);
+        editUser = findViewById(R.id.inputUser);
+        editPass = findViewById(R.id.inputPass);
+        TextView txtLogin = findViewById(R.id.txtLogin);
 
         btnSign.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 String name, user, pass, phone;
-                name = String.valueOf(editName.getText());
-                phone = String.valueOf(editPass.getText());
-                pass = String.valueOf(editPass.getText());
-                user = String.valueOf(editUser.getText());
-
+                name = editName.getText().toString();
+                phone = editPhone.getText().toString();
+                user = editUser.getText().toString();
+                pass = editPass.getText().toString();
+                if (TextUtils.isEmpty(name)) {
+                    editName.setError("Không được để trống");
+                    return;
+                }
+                if (TextUtils.isEmpty(phone)) {
+                    editPhone.setError("Không được để trống");
+                    return;
+                }
                 if (user.length() < 6) {
                     editUser.setError("Mật khẩu phải có ít nhất " + 6 + " kí tự");
                     return;
@@ -61,42 +90,37 @@ public class Register extends AppCompatActivity {
                     editUser.setError("Username không được chứa kí tự số");
                     return;
                 }
+                Map<String, Object> account = new HashMap<>();
+                account.put("Full name: ",name);
+                account.put("Phone: ", phone);
+                account.put("Username: ", user);
+                account.put("Password: ", encryptPassword(pass));
 
-                HelperClass helperClass = new HelperClass(name, phone, user, pass);
-                SupportClass sp = new SupportClass();
-
-                databaseReference.child(user).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        if (!task.isSuccessful()) {
-                            Log.e("firebase", "Error getting data", task.getException());
-                        }
-                        else {
-                            DataSnapshot snapshot = task.getResult();
-                            if (snapshot.exists()){
-                                Toast.makeText(getApplicationContext(), "Username da ton tai", Toast.LENGTH_SHORT).show();
+                db.collection("accounts")
+                        .add(account)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Toast.makeText(getApplicationContext(), "Đăng kí thành công", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(Register.this, Login.class);
+                                startActivity(intent);
                             }
-                            else{
-                                    helperClass.setPass(sp.PasswordHash(pass));
-                                    databaseReference.child(helperClass.getUser()).setValue(helperClass);
-                                    Toast.makeText(getApplicationContext(),"Dang ki thanh cong", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                    Intent intent = new Intent(view.getContext(),Login.class);
-                                    startActivity(intent);
-                                }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
                             }
-
-                        }
-                });
-
+                        });
             }
         });
+
         txtLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(Register.this, Login.class);
                 startActivity(intent);
             }
         });
+
     }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "540478768776",
+    "project_id": "mobile-labs-20521540-lab4",
+    "storage_bucket": "mobile-labs-20521540-lab4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540478768776:android:0d705a178783f6797d413d",
+        "android_client_info": {
+          "package_name": "com.example.mobile_labs_20521540"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHFCJ8x2GyS3J1QtjXbY87WMHXTL3vhow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

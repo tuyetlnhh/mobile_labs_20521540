@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">mobile_labs_20521540</string>
+    <string name ="mobile"><font color="#0B70C1">Mobile</font><font color="#FF000000"> Labs</font></string>
+    <string name="hintName">Please enter fullname</string>
+    <string name = "hintPhone">Please enter phone number</string>
+    <string name = "hintUser">Please enter username</string>
+    <string name = "hintPass">Please enter password</string>
+    <string name ="signup"><font color="#5E5E5E">Back to</font><font color="#FF000000"> Login</font></string>
+    <string name ="login"><font color="#5E5E5E">Dont have an account?</font><font color="#FF000000"> Sign up</font></string>
 </resources>

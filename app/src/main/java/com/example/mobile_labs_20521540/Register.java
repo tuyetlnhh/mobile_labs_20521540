@@ -91,12 +91,12 @@ public class Register extends AppCompatActivity {
                     return;
                 }
                 Map<String, Object> account = new HashMap<>();
-                account.put("Full name: ",name);
-                account.put("Phone: ", phone);
-                account.put("Username: ", user);
-                account.put("Password: ", encryptPassword(pass));
+                account.put("Fullname",name);
+                account.put("Phone", phone);
+                account.put("Username", user);
+                account.put("Password", encryptPassword(pass));
 
-                db.collection("accounts")
+                db.collection("users")
                         .add(account)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override

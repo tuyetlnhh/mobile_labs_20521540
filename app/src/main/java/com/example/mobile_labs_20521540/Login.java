@@ -85,7 +85,7 @@ public class Login extends AppCompatActivity {
                             Intent intent = new Intent(Login.this, MainActivity.class);
                             List<DocumentSnapshot> documents = queryS.getDocuments();
                             String fullname = documents.get(0).getString("Fullname");
-                            intent.putExtra("Full name", fullname);
+                            intent.putExtra("Fullname", fullname);
                             startActivity(intent);
                         }
                     } else {

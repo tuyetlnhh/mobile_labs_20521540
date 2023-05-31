@@ -80,6 +80,7 @@
             android:background="@drawable/rounded_corner"
             android:hint="@string/hintPass"
             android:padding="10dp"
+            android:password="true"
             android:textSize="9pt" />
 
         <Button

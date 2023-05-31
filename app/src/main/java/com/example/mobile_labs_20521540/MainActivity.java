@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        String fullname = intent.getStringExtra("full name");
+        String fullname = intent.getStringExtra("Fullname");
         TextView txtName = findViewById(R.id.txtName);
         txtName.setText(fullname);
         Button btnLogout = findViewById(R.id.btnLogout);

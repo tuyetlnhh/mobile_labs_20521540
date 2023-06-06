@@ -33,22 +33,25 @@ import java.security.NoSuchAlgorithmException;
 
 public class Login extends AppCompatActivity {
 
-    private String encryptPassword(String password) {
+    public static String encodePassword(String password) {
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(password.getBytes());
-            BigInteger number = new BigInteger(1, messageDigest);
-            String md5Password = number.toString(16);
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
 
-            while (md5Password.length() < 32) {
-                md5Password = "0" + md5Password;
+            byte[] passwordBytes = password.getBytes();
+
+            byte[] hashedBytes = md.digest(passwordBytes);
+
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
             }
 
-            return md5Password;
+            return sb.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            return null;
         }
+
+        return null;
     }
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -71,7 +74,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String username = editUser.getText().toString();
-                String password = encryptPassword(editPass.getText().toString());
+                String password = encodePassword(editPass.getText().toString());
                 Query query = usersRef.whereEqualTo("Username", username).whereEqualTo("Password", password);
                 query.get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

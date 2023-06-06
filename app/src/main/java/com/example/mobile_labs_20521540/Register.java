@@ -15,10 +15,15 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import java.math.BigInteger;
@@ -32,22 +37,25 @@ public class Register extends AppCompatActivity {
     EditText editPass;
     Button btnSign;
 
-    private String encryptPassword(String password) {
+    public static String encodePassword(String password) {
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(password.getBytes());
-            BigInteger number = new BigInteger(1, messageDigest);
-            String md5Password = number.toString(16);
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
 
-            while (md5Password.length() < 32) {
-                md5Password = "0" + md5Password;
+            byte[] passwordBytes = password.getBytes();
+
+            byte[] hashedBytes = md.digest(passwordBytes);
+
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
             }
 
-            return md5Password;
+            return sb.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            return null;
         }
+
+        return null;
     }
 
     @Override
@@ -94,7 +102,7 @@ public class Register extends AppCompatActivity {
                 account.put("Fullname",name);
                 account.put("Phone", phone);
                 account.put("Username", user);
-                account.put("Password", encryptPassword(pass));
+                account.put("Password", encodePassword(pass));
 
                 db.collection("users")
                         .add(account)
